@@ -1,6 +1,6 @@
 import unittest
 from textnode import TextNode, TextType
-
+from split_node_delimiter import split_nodes_delimiter
 
 class TestTextNode(unittest.TestCase):
     def test_eq(self):
@@ -36,6 +36,22 @@ class TestTextNode(unittest.TestCase):
         self.assertEqual(html_node.value, None)
         self.assertEqual(html_node.props, {"src": "https://boots.dev/", "alt": "This is a img node"})
 
+    def test_split_nodes(self):
+        node = TextNode("This is text with a `code block` word", TextType.PLAIN)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(new_nodes, [
+            TextNode("This is text with a ", TextType.PLAIN),
+            TextNode("code block", TextType.CODE),
+            TextNode(" word", TextType.PLAIN),
+        ])
+
+        node_2 = TextNode("This is text with a **code block** word", TextType.PLAIN)
+        new_nodes_2 = split_nodes_delimiter([node_2], "**", TextType.BOLD)
+        self.assertEqual(new_nodes_2, [
+            TextNode("This is text with a ", TextType.PLAIN),
+            TextNode("code block", TextType.BOLD),
+            TextNode(" word", TextType.PLAIN),
+        ])
 
 if __name__ == "__main__":
     unittest.main()
