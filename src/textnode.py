@@ -32,6 +32,7 @@ class TextNode():
             case _:
                 raise Exception(f"{self.text_type} not found!")
 
+
     def __eq__(self, other):
         return (self.text == other.text and self.text_type == other.text_type and self.url == other.url) 
 
